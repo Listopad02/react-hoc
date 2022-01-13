@@ -9,22 +9,28 @@ const starWarsChars = [
   { name: 'Obi-Wan Kenobi', side: 'light' }
 ]
 
-const App = ({list, side}) => {
+const App = ({list}) => (
+  <ul>
+    { list.map((char, i) => {
+      return (
+        <li key={char.name + i}>
+          <strong>{char.name}</strong> - &nbsp;
+          { char.side }
+        </li>
+      )
+    }) }
+  </ul>
+)
+
+
+const withFilteredProps = Component => ({list, side}) => {
   const filteredList = list.filter(char => char.side === side)
-  return (
-    <ul>
-      { filteredList.map((char, i) => {
-        return (
-          <li key={char.name + i}>
-            <strong>{char.name}</strong> - &nbsp;
-            { char.side }
-          </li>
-        )
-      }) }
-    </ul>
-  )
+  return <Component list={filteredList} />
 }
-ReactDOM.render(<App list={starWarsChars} side="light" />, document.getElementById('root'));
+
+const FilteredList = withFilteredProps(App)
+
+ReactDOM.render(<FilteredList list={starWarsChars} side="dark" />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
